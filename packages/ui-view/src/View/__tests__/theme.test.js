@@ -107,4 +107,12 @@ describe('View.theme', () => {
       expect(contrast(variables.backgroundWarning, variables.colorPrimaryInverse)).to.be.above(4.5)
     })
   })
+
+  describe('with the canvas ams theme', async () => {
+    const variables = View.generateTheme('canvas-ams')
+
+    it('should have a focus color that meets 3:1 contrast', () => {
+      expect(contrast(variables.focusColorInfo, variables.color)).to.be.above(3)
+    })
+  })
 })

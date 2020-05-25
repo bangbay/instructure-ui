@@ -27,6 +27,7 @@ import { expect, mount, stub } from '@instructure/ui-test-utils'
 
 import { List } from '../index'
 import { ListLocator } from '../ListLocator'
+import styles from '../styles.css'
 
 describe('<List />', async () => {
   it('should render list items and filter out null/falsy children', async () => {
@@ -76,6 +77,40 @@ describe('<List />', async () => {
     )
     const list = await ListLocator.find()
     expect(list.getTagName()).to.equal('ol')
+  })
+
+  it('should render unstyled variant container', async () => {
+    await mount(
+      <List variant="unstyled">
+        <List.Item>List item 1</List.Item>
+        <List.Item>List item 2</List.Item>
+        <List.Item>List item 3</List.Item>
+        <List.Item>List item 4</List.Item>
+      </List>
+    )
+    const list = await ListLocator.find()
+    expect(list.hasClass(styles.root)).to.be.true()
+    expect(list.hasClass(styles.unstyled)).to.be.true()
+  })
+
+  it('should render inline variant container', async () => {
+    await mount(
+      <List variant="inline">
+        <List.Item>List item 1</List.Item>
+      </List>
+    )
+    const list = await ListLocator.find()
+    expect(list.hasClass(styles.root)).to.be.false()
+  })
+
+  it('should not render list items', async () => {
+    await mount(
+      <List>
+      </List>
+    )
+    const list = await ListLocator.find()
+    const nestedItem = list.findItem()
+    expect(Object.keys(nestedItem).length).to.equal(0)
   })
 
   it('should meet a11y standards', async () => {

@@ -31,6 +31,18 @@ import { BreadcrumbLocator } from '../BreadcrumbLocator'
 import BreadcrumbExamples from '../__examples__/Breadcrumb.examples'
 
 describe('<Breadcrumb />', async () => {
+  it('should render breadcrumbs', async () => {
+    await mount(
+      <Breadcrumb label="Settings">
+        <Breadcrumb.Link>Account</Breadcrumb.Link>
+        <Breadcrumb.Link>Password</Breadcrumb.Link>
+      </Breadcrumb>
+    )
+    const breadcrumb = await BreadcrumbLocator.find()
+    const breadcrumbs = await breadcrumb.findAllLinks()
+    expect(breadcrumbs.length).to.equal(2)
+  })
+
   it('should render the label as an aria-label attribute', async () => {
     await mount(
       <Breadcrumb label="Settings">
@@ -41,6 +53,16 @@ describe('<Breadcrumb />', async () => {
     const label = await breadcrumb.find(':label(Settings)')
 
     expect(label.getAttribute('aria-label')).to.equal('Settings')
+  })
+
+  it('should not render breadcrumb links', async () => {
+    await mount(
+      <Breadcrumb label="Settings">
+      </Breadcrumb>
+    )
+    const breadcrumb = await BreadcrumbLocator.find()
+    const nestedItem = breadcrumb.findLink()
+    expect(Object.keys(nestedItem).length).to.equal(0)
   })
 
   describe('with generated examples', async () => {

@@ -55,4 +55,27 @@ describe('<CloseButton />', async () => {
 
     expect(onClick).to.have.been.calledOnce()
   })
+
+  it('should render with children', async () => {
+    await mount(
+      <CloseButton variant='icon-inverse'>
+        <i>Child</i>
+      </CloseButton>
+    )
+
+    const button = await CloseButtonLocator.find()
+    const icon = await button.find('i')
+    expect(icon).to.exist()
+  })
+
+  it('should respond to default onClick event', async () => {
+    await mount(
+      <CloseButton screenReaderLabel="Hello" />
+    )
+    const closeButtonRoot = await CloseButtonLocator.find()
+    const button = await closeButtonRoot.find(':focusable')
+    const event = await button.click()
+
+    expect(event.currentTarget).to.be.null()
+  })
 })

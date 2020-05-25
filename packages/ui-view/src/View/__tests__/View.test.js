@@ -201,6 +201,29 @@ describe('<View />', async () => {
     })
   })
 
+  it('should set inline offset with rtl (top, bottom, right, left)', async () => {
+    const subject = await mount(
+      <View
+        dir="rtl"
+        insetBlockStart="0"
+        insetBlockEnd="20px"
+        insetInlineStart="2px"
+        insetInlineEnd="3px"
+      >
+        <h1>Hello!</h1>
+      </View>
+    )
+
+    const view = within(subject.getDOMNode())
+
+    await wait(() => {
+      expect(view.getComputedStyle()['top']).to.equal('0px')
+      expect(view.getComputedStyle()['bottom']).to.equal('20px')
+      expect(view.getComputedStyle()['left']).to.equal('3px')
+      expect(view.getComputedStyle()['right']).to.equal('2px')
+    })
+  })
+
   it('should override default max-width', async () => {
     const subject = await mount(
       <View>
@@ -226,6 +249,18 @@ describe('<View />', async () => {
       )
 
       expect(consoleError).to.be.calledWith(warning)
+    })
+
+    it('should not warn when withFocusOutline is null without position=relative', async () => {
+      const consoleError = stub(console, 'error')
+      const warning = 'Warning: [View] the focus outline will only show if the `position` prop is `relative`.'
+      await mount(
+        <View withFocusOutline={null}>
+          <h1>Hello!</h1>
+        </View>
+      )
+
+      expect(consoleError).not.to.be.calledWith(warning)
     })
 
     it('should warn when withFocusOutline is `true`, display is set to `inline`, and focusPosition is set to `offset`', async () => {
@@ -309,5 +344,32 @@ describe('<View />', async () => {
 
     const view = within(subject.getDOMNode())
     expect(await view.accessible()).to.be.true()
+  })
+
+  describe('deprecation warnings', () => {
+    [
+      [ 'background', 'default', 'primary' ],
+      [ 'background', 'light', 'secondary' ],
+      [ 'background', 'inverse', 'primary-inverse' ],
+      [ 'borderColor', 'default', 'primary' ],
+      [ 'borderColor', 'inverse', 'transparent' ]
+    ].forEach(([ propName, propValue, newPropValue ]) => {
+      it('should warn for deprecated prop value ${} for', async () => {
+        const consoleError = stub(console, 'warn')
+        const warning = `Warning: [View] In version 8.0.0, the value '${propValue}' for \`${propName}\` will be changed to '${newPropValue}'. Use that value instead.`
+
+        const props = {
+          [propName]: propValue
+        }
+
+        await mount(
+          <View {...props}>
+            <h1>Hello!</h1>
+          </View>
+        )
+
+        expect(consoleError).to.be.calledWith(warning)
+      })
+    })
   })
 })

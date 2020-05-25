@@ -295,6 +295,7 @@ class View extends Component {
 
   componentDidMount () {
     // Not calling getComputedStyle can save hundreds of ms in tests and production
+    /* istanbul ignore next */
     if (process.env.NODE_ENV === 'development') {
       error(
         !((function verifySpanMargin (element, margin) {
@@ -473,8 +474,6 @@ class View extends Component {
 
   // verify that each value passed into ThemeablePropType is identical
   verifyUniformValues = (initialValue, input) => {
-    if (typeof input !== 'string') return false
-
     return input
       .trim()
       .split(' ')
@@ -569,6 +568,7 @@ class View extends Component {
 // View.propTypes in the method matches the View.propTypes that will be called in
 // the consumers. Otherwise the discrepency could cause unexpected props being
 // allowed through.
+/* istanbul ignore next */
 View.omitViewProps = (props, Component) => {
   if (process.env.NODE_ENV !== 'production') {
     Object.keys(pickProps(props, View.propTypes)).forEach((prop) => {

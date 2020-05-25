@@ -110,20 +110,6 @@ class Item extends Component {
     isDisabled: false
   }
 
-  handleClick = (e) => {
-    const {
-      isDisabled,
-      onClick
-    } = this.props
-
-    if (isDisabled) {
-      e.preventDefault()
-      e.stopPropagation()
-    } else if (typeof onClick === 'function') {
-      onClick(e)
-    }
-  }
-
   render () {
     const ElementType = getElementType(Item, this.props)
 
@@ -135,7 +121,8 @@ class Item extends Component {
       elementRef,
       renderAfter,
       cursor,
-      isDisabled
+      isDisabled,
+      onClick
     } = this.props
 
     const icon = callRenderProp(renderIcon)
@@ -163,14 +150,12 @@ class Item extends Component {
         {...passthroughProps(this.props)}
         as={ElementType}
         href={href}
-        onClick={this.handleClick}
+        onClick={onClick}
         disabled={isDisabled}
         elementRef={elementRef}
         display="flex"
         position="relative"
         borderRadius="medium"
-        onFocus={this.handleFocus}
-        onBlur={this.handleBlur}
         cursor={isDisabled ? 'not-allowed' : cursor}
         className={classes}
       >

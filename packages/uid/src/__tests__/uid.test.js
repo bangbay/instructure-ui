@@ -26,6 +26,10 @@ import { expect } from '@instructure/ui-test-utils'
 import { uid } from '../index'
 
 describe('uid', () => {
+  it('generates a default length', () => {
+    expect(uid().length).to.equal(12)
+  })
+
   it('generates a specified length', () => {
     expect(uid('', 5).length).to.equal(5)
     expect(uid('', 8).length).to.equal(8)
@@ -45,4 +49,3 @@ describe('uid', () => {
     expect(uid('foo', 5)).to.startWith('foo__')
   })
 })
-

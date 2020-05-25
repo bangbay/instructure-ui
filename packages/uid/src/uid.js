@@ -56,7 +56,7 @@ function _random (size) {
 }
 
 
-function _uid(_ignored, idLength = 12) {
+function _uid(_ignored, idLength) {
   var id = ''
   var bytes = _random(idLength)
   while (0 < idLength--) { /* eslint-disable-line no-param-reassign */

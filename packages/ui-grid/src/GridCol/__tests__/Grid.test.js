@@ -27,6 +27,7 @@ import React from 'react'
 import { expect, mount, stub } from '@instructure/ui-test-utils'
 
 import { GridCol } from '../index'
+import styles from '../styles.css'
 
 describe('<GridCol />', async () => {
   it('should render content in each column', async () => {
@@ -36,5 +37,31 @@ describe('<GridCol />', async () => {
     )
 
     expect(elementRef).to.have.been.calledWith(subject.getDOMNode())
+  })
+
+  it('should have small breakpoint class', async () => {
+    const breakpoint = 'small'
+    const size = 1
+    const width = { [breakpoint]: size }
+
+    const subject = await mount(
+      <GridCol width={width} startAt={breakpoint}>Foo</GridCol>
+    )
+    const column = subject.getDOMNode()
+
+    expect(column.classList.contains(styles[`${breakpoint}--${size}`])).to.be.true()
+  })
+
+  it('should have small offset class', async () => {
+    const breakpoint = 'small'
+    const size = 1
+    const offset = { [breakpoint]: size }
+
+    const subject = await mount(
+      <GridCol offset={offset} startAt={breakpoint}>Foo</GridCol>
+    )
+    const column = subject.getDOMNode()
+
+    expect(column.classList.contains(styles[`${breakpoint}-offset--${size}`])).to.be.true()
   })
 })

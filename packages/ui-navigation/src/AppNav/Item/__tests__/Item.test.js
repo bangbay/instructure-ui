@@ -74,6 +74,20 @@ describe('<AppNav.Item />', async () => {
     expect(await item.find('strong:contains(I am rendered after!)')).to.exist()
   })
 
+  it('should respond to default onClick event', async () => {
+    await mount(
+      <Item
+        renderLabel="Some label"
+      />
+    )
+    const item = await ItemLocator.find()
+
+    const button = await item.find('button')
+    const event = await button.click()
+
+    expect(event.currentTarget).to.be.null()
+  })
+
   it('should respond to an onClick event', async () => {
     const onClick = stub()
     await mount(
@@ -113,5 +127,32 @@ describe('<AppNav.Item />', async () => {
     )
     const item = await ItemLocator.find()
     expect(await item.accessible()).to.be.true()
+  })
+
+  describe('when disabled', async () => {
+    it('sets cursor to not-allowed', async () => {
+      await mount(
+        <Item
+          isDisabled={true}
+          renderLabel="Some label"
+        />
+      )
+      const item = await ItemLocator.find()
+      const button = await item.find('button')
+      const cursor = button.getComputedStyle().cursor
+      expect(cursor).to.equal('not-allowed')
+    })
+
+    it('sets the disabled attribute', async () => {
+      await mount(
+        <Item
+          isDisabled={true}
+          renderLabel="Some label"
+        />
+      )
+      const item = await ItemLocator.find()
+      const button = await item.find('button')
+      expect(button.getAttribute('disabled')).to.exist()
+    })
   })
 })
